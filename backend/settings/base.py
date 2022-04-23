@@ -20,13 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t%ein@(58l)9+-#enreu*qt!$fmn!j89-_(hpxxbcnndw#"
+SECRET_KEY = os.getenv("SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "")
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 # Application definition
 
@@ -76,12 +75,12 @@ WSGI_APPLICATION = "settings.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql_psycopg2"),  # noqa E501
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": int(os.getenv("DB_PORT", 5432)),
-        "NAME": os.getenv("DB_NAME", "stackt_db"),
-        "USER": os.getenv("DB_USER", "stackt"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "stackt"),
+        "ENGINE": os.getenv("DB_ENGINE", ""),
+        "HOST": os.getenv("DB_HOST", ""),
+        "PORT": int(os.getenv("DB_PORT", 0)),
+        "NAME": os.getenv("DB_NAME", ""),
+        "USER": os.getenv("DB_USER", ""),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
     }
 }
 
