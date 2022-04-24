@@ -22,8 +22,8 @@ python3 manage.py runserver --settings=settings.local
 ```
 ### Run production deploy
 ```
-docker-compose -f docker-compose-deploy.yaml build
-docker-compose -f docker-compose-deploy.yaml up
+docker-compose -f docker-compose-deploy.yml build
+docker-compose -f docker-compose-deploy.yml up
 ```
 ### Special rules for coding
 * Please use black just for your file where you made edit.
