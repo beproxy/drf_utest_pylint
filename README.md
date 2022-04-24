@@ -22,6 +22,7 @@ python3 manage.py runserver --settings=settings.local
 ```
 ### Run production deploy
 ```
+export $(cat .env.tpl_deploy | xargs)
 docker-compose -f docker-compose-deploy.yml build
 docker-compose -f docker-compose-deploy.yml up
 ```
