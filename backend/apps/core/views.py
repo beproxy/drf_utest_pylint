@@ -1,4 +1,6 @@
-from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, AdminRenderer
+from rest_framework.renderers import (
+    AdminRenderer, BrowsableAPIRenderer, JSONRenderer
+)
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.viewsets import mixins
 from apps.core.models import Order
@@ -6,9 +8,7 @@ from apps.core.serializers import OrderSerializer, OrdersListSerializer
 
 
 class OrderViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    GenericViewSet
+    mixins.CreateModelMixin, mixins.ListModelMixin, GenericViewSet
 ):
     serializer_class = OrderSerializer
     queryset = Order.objects.all().select_related(
@@ -17,7 +17,7 @@ class OrderViewSet(
     renderer_classes = (AdminRenderer, BrowsableAPIRenderer, JSONRenderer)
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
 
             return OrdersListSerializer
 

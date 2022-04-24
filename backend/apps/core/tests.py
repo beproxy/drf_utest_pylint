@@ -10,7 +10,9 @@ from apps.core.views import OrderViewSet
 
 class OrderTestCase(APITestCase):
     def setUp(self):
-        self.test_user = User.objects.create(username="test_user", password="testPassword")
+        self.test_user = User.objects.create(
+            username="test_user", password="testPassword"
+        )
         self.data = {
             "address_from": {
                 "city": "London",
@@ -40,13 +42,13 @@ class OrderTestCase(APITestCase):
             "mobile": "4423446576768",
             "my_price": 100,
             "all_inclusive": "true",
-            "user": 1
+            "user": 1,
         }
 
     def test_order(self):
         factory = APIRequestFactory()
         view = OrderViewSet.as_view({"post": "create"})
-        request = factory.post('/order/', self.data, format='json')
+        request = factory.post("/order/", self.data, format="json")
         force_authenticate(request, user=self.test_user)
         response = view(request)
 
@@ -55,12 +57,22 @@ class OrderTestCase(APITestCase):
         self.assertTrue(order)
 
         view = OrderViewSet.as_view({"get": "list"})
-        request = factory.get('/order/')
+        request = factory.get("/order/")
         force_authenticate(request, user=self.test_user)
         response = view(request)
-        order["address_from"] = self.data.get("address_from").get("city") if order.pop("address_from_id") else ""
-        order["address_to"] = self.data.get("address_to").get("city") if order.pop("address_to_id") else ""
-        order["stuff"] = self.data.get("stuff").get("id") if order.pop("stuff_id") else ""
+        order["address_from"] = (
+            self.data.get("address_from").get("city")
+            if order.pop("address_from_id")
+            else ""
+        )
+        order["address_to"] = (
+            self.data.get("address_to").get("city")
+            if order.pop("address_to_id")
+            else ""
+        )
+        order["stuff"] = (
+            self.data.get("stuff").get("id") if order.pop("stuff_id") else ""
+        )
         order["user"] = self.test_user.id if order.pop("user_id") else ""
         order_keys = set(order.keys())
         order_values = set(order.values())
