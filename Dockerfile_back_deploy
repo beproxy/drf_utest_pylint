@@ -1,0 +1,44 @@
+FROM ubuntu:20.04
+
+ENV PYTHONUNBUFFERED 1
+
+ENV REFRESHED_AT 30.11.2021
+
+ARG ROOT_USER
+
+COPY backend/requirements /home/${ROOT_USER}/requirements
+COPY entrypoint.sh /home/${ROOT_USER}/
+
+WORKDIR /home/${ROOT_USER}
+EXPOSE 8000
+
+USER root
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -yq \
+        apache2-dev \
+        build-essential \
+        curl \
+        libldap2-dev \
+        libsasl2-dev \
+        nasm \
+        git \
+        pkg-config \
+        python3-dev \
+        python3-pip \
+        python3-venv && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    python3 -m venv /venv && \
+	/venv/bin/pip install --upgrade pip && \
+    adduser --disabled-password --no-create-home ${ROOT_USER} && \
+    mkdir -p /logs && \
+	chmod +x entrypoint.sh
+
+ENV PATH="/venv/bin:$PATH"
+
+RUN	/venv/bin/pip install -r requirements/req_deploy.txt
+
+COPY /backend /home/${ROOT_USER}
+
+ENTRYPOINT ["./entrypoint.sh"]
